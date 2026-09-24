@@ -107,12 +107,14 @@ export default function App() {
 
   const [step, setStep] = useState(0); 
   const [userInfo, setUserInfo] = useState({ name: '', email: '', company: '' });
-  const [adminEmail, setAdminEmail] = useState(APP_CONFIG.defaultAdminEmail);
+  const [adminEmail, setAdminEmail] = useState(APP_CONFIG?.defaultAdminEmail || "");
   
   const [currentQ, setCurrentQ] = useState(0);
   const [userAnswers, setUserAnswers] = useState({});
   const [score, setScore] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(APP_CONFIG.timerSeconds);
+  
+  // Hardcoded 12 minutes (720 seconds) directly to prevent NaN errors
+  const [timeLeft, setTimeLeft] = useState(12 * 60);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   // Resume Modal State
@@ -170,7 +172,8 @@ export default function App() {
       setCurrentQ(recoveredData.currentQ);
       setUserAnswers(recoveredData.userAnswers);
       setScore(recoveredData.score);
-      setTimeLeft(recoveredData.timeLeft);
+      // Ensure restored time is valid, otherwise default to 12 minutes
+      setTimeLeft(recoveredData.timeLeft && !isNaN(recoveredData.timeLeft) ? recoveredData.timeLeft : 12 * 60);
       setUserInfo(recoveredData.userInfo);
     }
     setShowResumePrompt(false);
@@ -182,6 +185,7 @@ export default function App() {
   };
 
   const formatTime = (seconds) => {
+    if (isNaN(seconds)) return "0:00";
     const m = Math.floor(seconds / 60);
     const s = seconds % 60;
     return `${m}:${s < 10 ? '0' : ''}${s}`;
@@ -236,7 +240,7 @@ export default function App() {
 
   const finishAndSendTest = (finalScore) => {
     clearInterval(timerRef.current);
-    localStorage.removeItem('qbits_pretest_session'); // Clear save file on finish
+    localStorage.removeItem('qbits_pretest_session'); 
     setScore(finalScore);
     setStep(100); 
     setIsSubmitting(true);
@@ -247,11 +251,13 @@ export default function App() {
       student_email: userInfo.email,
       student_company: userInfo.company || 'N/A',
       final_score: `${finalScore} / 100`,
-      time_spent: formatTime(APP_CONFIG.timerSeconds - timeLeft)
+      // Hardcoded math for 12 minutes to ensure the email time tracking works safely
+      time_spent: formatTime((12 * 60) - timeLeft)
     };
 
-    if (APP_CONFIG.emailJS.serviceID !== "YOUR_SERVICE_ID") {
-      emailjs.send(APP_CONFIG.emailJS.serviceID, APP_CONFIG.emailJS.templateID, templateParams, APP_CONFIG.emailJS.publicKey)
+    // Safely reads the flat keys we set in the revised Config.js file
+    if (APP_CONFIG?.EMAIL_SERVICE_ID && APP_CONFIG.EMAIL_SERVICE_ID !== "YOUR_SERVICE_ID_HERE") {
+      emailjs.send(APP_CONFIG.EMAIL_SERVICE_ID, APP_CONFIG.EMAIL_TEMPLATE_ID, templateParams, APP_CONFIG.EMAIL_PUBLIC_KEY)
         .then((response) => console.log('SUCCESS: Email sent!', response))
         .catch((error) => console.error('FAILED: Email did not send.', error))
         .finally(() => setIsSubmitting(false));
@@ -421,7 +427,7 @@ export default function App() {
             <div className="quiz-content-area">
               {quizQuestions[currentQ].section === 1 && (
                 <div className="statement-frame">
-                  <img src="/financial-statement.png" alt="Estado de Resultados y Balance General" />
+                  <img src="financial-statement.png" alt="Estado de Resultados y Balance General" />
                 </div>
               )}
               

@@ -1,8 +1,7 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-
-// https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [react()],
-  base: '/qbits-pretest-v2/', 
-})
+export const APP_CONFIG = {
+  EMAIL_SERVICE_ID: "service_c449oyl",
+  EMAIL_TEMPLATE_ID: "template_rwe5fw4",
+  EMAIL_PUBLIC_KEY: "2L4l6tlIkzshKm8ul",
+  PASSING_SCORE: 80,
+  TIMER_MINUTES: 12
+};
