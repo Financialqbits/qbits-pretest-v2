@@ -1,0 +1,497 @@
+/* ==========================================
+   GLOBAL RESET & FULL SCREEN SETUP
+   ========================================== */
+* {
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body, html, #root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%; 
+  height: 100dvh; 
+  overflow: hidden; 
+  color: #1a1a1a; 
+  background-color: #f8fafc; 
+}
+
+/* ==========================================
+   MAIN CONTAINERS & DYNAMIC BACKGROUNDS
+   ========================================== */
+.main-wrapper, .card-container {
+  width: 100%;
+  height: 100%; 
+  display: flex;
+  flex-direction: column;
+}
+
+.bg-branded {
+  background-image: url('/bg-pattern.jpg');
+  background-size: cover; 
+  background-position: top center; 
+  background-repeat: no-repeat;
+}
+
+.bg-clean {
+  background-color: #f1f5f9; 
+}
+
+/* ==========================================
+   THE "MAGIC WINDOW" (SCROLL BEHAVIOR)
+   ========================================== */
+.screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  overflow-y: auto; 
+  scrollbar-width: none; 
+  -ms-overflow-style: none; 
+}
+
+.screen::-webkit-scrollbar {
+  display: none; 
+}
+
+/* --- BRANDED SCREEN SAFE ZONES --- */
+.bg-branded .screen {
+  /* Provides perfect breathing room below the logo for ALL branded screens, preventing SVG overlap */
+  margin-top: max(22vh, 220px); 
+  margin-bottom: 2vh; 
+}
+
+/* --- CLEAN QUIZ SCREEN LAYOUT --- */
+.bg-clean .screen {
+  margin-top: 2vh; 
+  margin-bottom: 2vh;
+  padding: 2.5rem 4%; 
+  background: white; 
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  border: 1px solid #e2e8f0;
+}
+
+/* ==========================================
+   CENTERED CONTENT ALIGNMENT
+   ========================================== */
+.landing-content, .form-content, .result-content, .section-content {
+  width: 100%;
+  max-width: 700px; 
+  margin: 0 auto; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: transparent; 
+  padding-bottom: 0.5rem; 
+  /* Allows the content block to stretch, pushing the button to the bottom */
+  flex: 1; 
+}
+
+.landing-content h1, .section-content h2 {
+  color: #0c3b6d;
+  font-size: 2.1rem; 
+  font-weight: 800; 
+  letter-spacing: -0.02em; 
+  margin-bottom: 0.5rem; 
+  text-shadow: 0 0 15px rgba(255,255,255,1), 0 0 5px rgba(255,255,255,1);
+}
+
+.landing-content p, .section-content p {
+  font-size: 1.1rem; 
+  font-weight: 600; 
+  line-height: 1.4;
+  margin-bottom: 0.5rem; 
+  color: #1e293b; 
+  text-shadow: 0 0 10px rgba(255,255,255,1), 0 0 4px rgba(255,255,255,1);
+}
+
+.highlight-text {
+  color: #e11d48;
+  font-weight: 700; 
+  background: rgba(255, 255, 255, 0.8); 
+  padding: 0.6rem 1.25rem;
+  border-radius: 8px;
+  display: inline-block;
+  margin-top: 0.25rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+/* ==========================================
+   INPUTS & BUTTONS
+   ========================================== */
+.text-input-full, .select-input-full {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 1.25rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 1.1rem; 
+  font-weight: 600; 
+  color: #0f172a; 
+  transition: border-color 0.2s;
+  background: rgba(255,255,255,0.95);
+}
+
+option {
+  color: #000000;
+  font-weight: 700; 
+  background-color: #ffffff;
+}
+
+.text-input-full:focus, .select-input-full:focus {
+  outline: none;
+  border-color: #1a5c9c;
+}
+
+form {
+  max-width: 500px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  /* Allows the form to stretch, pushing the submit button down */
+  flex: 1; 
+}
+
+.btn-primary {
+  background-color: #1a5c9c;
+  color: white;
+  border: none;
+  padding: 12px 32px;
+  font-size: 1.1rem; 
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin: 0 auto;
+  display: block;
+  box-shadow: 0 4px 12px rgba(26, 92, 156, 0.25);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: #0c3b6d;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(12, 59, 109, 0.3);
+}
+
+.btn-primary:disabled {
+  background-color: #94a3b8;
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Locks the Welcome and Form buttons to the absolute bottom of the container */
+.landing-content .btn-primary,
+form .btn-primary {
+  margin-top: auto; 
+}
+
+/* ==========================================
+   QUIZ AREA & RADIO BUTTON SPACING
+   ========================================== */
+.quiz-content-area {
+  width: 100%;
+  max-width: 800px; 
+  margin: 0 auto; 
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+  padding-bottom: 1rem;
+  /* Allows the question area to stretch, pushing the footer down */
+  flex: 1; 
+}
+
+.statement-frame img {
+  width: 100%;
+  display: block;
+  margin: 0 auto 1rem auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+}
+
+.question-prompt {
+  background: rgba(248, 250, 252, 0.95);
+  padding: 1rem;
+  border-left: 5px solid #1a5c9c;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.question-prompt p {
+  font-size: 1.1rem;
+  color: #1e293b;
+  font-weight: 500;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.5;
+}
+
+.question-label {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 700; 
+  margin-bottom: 1rem;
+  color: #0c3b6d;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.radio-label {
+  display: flex;
+  align-items: flex-start;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+
+.radio-label:hover {
+  background: #ffffff;
+  border-color: #cbd5e1;
+}
+
+input[type="radio"] {
+  margin-top: 5px;
+  margin-right: 15px;
+  transform: scale(1.3);
+  cursor: pointer;
+}
+
+.radio-text {
+  font-size: 1.1rem;
+  font-weight: 500;
+  line-height: 1.4;
+  color: #1e293b;
+}
+
+.dual-select-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.select-row {
+  font-size: 1.15rem; 
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.select-input-small {
+  padding: 8px;
+  margin-left: 10px;
+  font-size: 1.05rem;
+  font-weight: 600; 
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  color: #0f172a; 
+  background: #ffffff;
+}
+
+/* ==========================================
+   HEADERS & FOOTERS
+   ========================================== */
+.timer-badge {
+  text-align: center;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #e11d48;
+  margin-bottom: 1rem;
+  background: #ffffff;
+  padding: 0.4rem 1.25rem;
+  border-radius: 20px;
+  display: inline-block;
+  align-self: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  border: 1px solid #f1f5f9;
+}
+
+.quiz-footer {
+  display: flex;
+  flex-direction: column; 
+  justify-content: center;
+  align-items: center;
+  gap: 1.25rem; 
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(15, 23, 42, 0.15);
+}
+
+.footer-stats {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.score-tracker, .progress-tracker {
+  font-size: 1.05rem; 
+  color: #1e293b;
+  font-weight: 700;
+}
+
+/* ==========================================
+   RESULTS SCREEN
+   ========================================== */
+.result-screen {
+  align-items: center;
+  text-align: center;
+}
+
+.icon-pass, .icon-fail {
+  font-size: 3rem;
+  margin-bottom: 0.75rem; 
+}
+
+.pass-text, .fail-text {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+}
+
+.pass-text { color: #16a34a; font-weight: 700; }
+.fail-text { color: #e11d48; font-weight: 700; }
+
+.score-details {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 1.25rem;
+  border-radius: 12px;
+  margin: 0.5rem 0; 
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: #1e293b;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.sending-text { color: #e11d48; font-weight: 600; text-shadow: 0 0 8px #fff; margin-bottom: 0.25rem; }
+.success-text { color: #16a34a; font-weight: 600; text-shadow: 0 0 8px #fff; margin-bottom: 0.25rem; }
+
+/* Locks the Cerrar button to the absolute bottom of the container */
+.btn-close {
+  align-self: center;
+  margin-top: auto !important; 
+  margin-bottom: 0.5rem; 
+}
+
+/* ==========================================
+   RESUME MODAL OVERLAY
+   ========================================== */
+.resume-modal-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 9999;
+  backdrop-filter: blur(2px);
+}
+
+.resume-modal {
+  background: white;
+  padding: 2.5rem 2rem;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  max-width: 400px;
+  width: 90%;
+}
+
+.resume-icon {
+  font-size: 2rem;
+  color: #475569;
+  border: 2px solid #475569;
+  border-radius: 50%;
+  width: 45px; height: 45px;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 1.5rem auto;
+  font-weight: bold;
+  font-family: serif;
+}
+
+.resume-modal h3 {
+  color: #1e293b;
+  font-size: 1.15rem;
+  margin-bottom: 2rem;
+  font-weight: 600;
+}
+
+.resume-buttons {
+  display: flex; justify-content: center; gap: 1rem;
+}
+
+.resume-buttons .btn-resume {
+  margin: 0;
+  padding: 10px 35px;
+  border-radius: 6px;
+}
+
+/* ==========================================
+   MOBILE RESPONSIVENESS (PORTRAIT)
+   ========================================== */
+@media (max-width: 768px) {
+  .bg-branded {
+    background-size: cover; 
+    background-position: top center; 
+  }
+
+  .bg-branded .screen {
+    margin-top: max(15vh, 160px); 
+    margin-bottom: max(5vh, 40px); 
+    padding: 0 5%;
+  }
+
+  .bg-clean .screen {
+    margin-top: 0;
+    margin-bottom: 0;
+    border-radius: 0;
+    border: none;
+    padding: 1.25rem 1rem;
+  }
+
+  .landing-content h1, .section-content h2 {
+    font-size: 1.7rem;
+  }
+  
+  .landing-content p, .section-content p, .radio-text, .question-label {
+    font-size: 1.05rem;
+  }
+
+  .btn-primary {
+    width: 100%;
+  }
+  
+  .resume-buttons {
+    flex-direction: row;
+  }
+  
+  .resume-buttons .btn-resume {
+    width: auto;
+    flex: 1;
+  }
+}
+
+/* ==========================================
+   MOBILE RESPONSIVENESS (LANDSCAPE FIX)
+   ========================================== */
+@media (max-height: 500px) and (orientation: landscape) {
+  .bg-branded .screen {
+    margin-top: 100px; 
+    margin-bottom: 20px; 
+  }
+}
